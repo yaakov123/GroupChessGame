@@ -25,7 +25,6 @@ public class ChessMain {
 			
 		
 		while(!pieceChosen.equals("q")) {	
-			int turn = 0;
 			displayBoard(board);
 			if(whichPlayer == 1) {
 				System.out.println("\n" + playerOne + ", your turn. Please make your move. Select a piece (e.g. d5) or \"q\" to quit >>> ");
@@ -156,13 +155,11 @@ public class ChessMain {
 					else {
 						whichPlayer = 1;
 					}
-					turn++;
+					
 			}
 		}
 	}
 	public static char[][] movePiece(char[][] chessBoard, char tempPieceType, int tempDown, int down, int tempAcross, int across) {
-		//int[] opposite = {7,6,5,4,3,2,1,0};
-		
 		chessBoard[down][across] = tempPieceType;
 		chessBoard[tempDown][tempAcross] = '`';
 		return chessBoard;
