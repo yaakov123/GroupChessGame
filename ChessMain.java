@@ -294,7 +294,7 @@ public class ChessMain {
 					}
 					break;
 				case 'B': case 'b':
-					if(tempDown - down != tempAcross - across) {
+					if(tempDown - down != tempAcross - across && tempDown - down != across - tempAcross) {
 						isValidMove = false;
 					}
 					else {
@@ -309,6 +309,9 @@ public class ChessMain {
 						isValidMove = true;
 					}
 					else if(tempDown - down == tempAcross - across) {
+						isValidMove = true;
+					}
+					else if(tempDown - down == across - tempAcross) {
 						isValidMove = true;
 					}
 					else {
@@ -337,43 +340,64 @@ public class ChessMain {
 		}
 		return isValidMove;
 	}
+	//Check a8 to a5 after pawn tomorrow
 	public static boolean checkPiecePath(char tempPieceType, int across, int tempAcross, int down, int tempDown, char[][] board, int whichPlayer) {
-		boolean isPathClear = true;
-		int i = 0;
-		int x = 0;
-		int y;
-		int z;
+		int vertical = tempDown - down;
+		int horizontal = tempAcross - across;
 		switch(tempPieceType) {
-			case 'P': case 'p': 
-				i = tempDown - down;
+			case 'P': 
+				for(int i = 0; i < vertical; i++) {
+					if(board[tempDown - 1 - i][across] != '`') {
+						return false;
+					}
+				}
 				break;
-			case 'B': case 'b': case 'q': case 'Q': case 'R': case 'r':
-				i = tempDown - down;
-				x = tempAcross - across;
-		}
-		if(x == 0) {
-			for(y = 0; y < i; y++) {
-				if(board[y][across] != '`') {
-					isPathClear =  false;
+			case 'p':
+				for(int i = 0; i > vertical; i--) {
+					if(board[tempDown + 1 - i][across] != '`') {
+						return false;
+					}
 				}
-			}
-			return true;
-		}
-		else if(i == 0){
-			for(y = 0; y < x; y++) {
-				if(board[down][y] != '`') {
-					isPathClear = false;
+				break;
+			case 'R': case 'r':
+				if(vertical == 0) {
+					if(horizontal > 0) {
+						for(int i = 0; i < horizontal; i++) {
+							if(board[tempDown - 1 - i][across] != '`') {
+								return false;
+							}
+						}
+					}
+					else {
+						for(int i = 0; i > horizontal; i--) {
+							if(board[tempDown + 1 + i][across] != '`') {
+								return false;
+							}
+						}
+					}
 				}
-			}
-			return true;
-		}
-		else {
-			for(z = 0, y = 0; z < x && y < i; z++, y++) {
-				if(board[z][y] != '`') {
-					isPathClear = false;
+				else if(horizontal == 0) {
+					if(vertical > 0) {
+						for(int i = 0; i < vertical; i++) {
+							if(board[tempDown][across - 1 - i] != '`') {
+								return false;
+							}
+						}
+					}
+					else {
+						for(int i = 0; i > vertical; i--) {
+							if(board[tempDown][across + 1 + i] != '`') {
+								return false;
+							}
+						}
+					}
 				}
-			}
-			return true;
+				
+				
+				break;
+				
 		}
+		return true;
+			
 	}
 }
