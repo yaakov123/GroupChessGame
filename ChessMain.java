@@ -5,6 +5,8 @@ import java.util.Scanner;
 public class ChessMain {
 	public static void main(String[] args) {
 		String pieceChosen = "";
+		int tempDown = 0;
+		int tempAcross = 0;
 		
 		Scanner input = new Scanner(System.in);
 		String playerOne;
@@ -89,15 +91,13 @@ public class ChessMain {
 								pieceType = checkPlaceOnBoard(board, down, across, whichPlayer);
 							}
 						}
-						int tempDown = down;
-						int tempAcross = across;
 						char tempPieceType = pieceType;
 						
 						
 						System.out.println("Where do you want to move that piece to >>> ");
 						pieceChosen = input.nextLine().toLowerCase();
 						
-						across = letterToNumber(pieceChosen); // Returns 10 if it's an invalid piece
+						tempAcross = letterToNumber(pieceChosen); // Returns 10 if it's an invalid piece
 						
 						while(across == 10) { 
 							System.out.println("Invalid selection");
@@ -109,7 +109,7 @@ public class ChessMain {
 						number = pieceChosen.charAt(1);
 						
 						if(Character.isDigit(number)) {
-							down = Character.getNumericValue(number) - 1;
+							tempDown = Character.getNumericValue(number) - 1;
 							
 							pieceType = checkPlaceOnBoard(board, down, across, whichPlayer);
 							
@@ -160,8 +160,8 @@ public class ChessMain {
 		}
 	}
 	public static char[][] movePiece(char[][] chessBoard, char tempPieceType, int tempDown, int down, int tempAcross, int across) {
-		chessBoard[down][across] = tempPieceType;
-		chessBoard[tempDown][tempAcross] = '`';
+		chessBoard[tempDown][tempAcross] = tempPieceType;
+		chessBoard[down][across] = '`';
 		return chessBoard;
 	}
 		
@@ -230,9 +230,9 @@ public class ChessMain {
 		boolean isValidMove = false;
 			switch(tempPieceType) {
 				case 'P':
-					if(tempDown + 1 == 7) {
+					if(down + 1 == 7) {
 						if(tempAcross == across) {
-							if(tempDown - down == 1 || tempDown - down == 2) {
+							if(down - tempDown == 1 || down - tempDown == 2) {
 								isValidMove = true;
 							}
 							else {
@@ -244,7 +244,7 @@ public class ChessMain {
 						}
 					}
 					else {
-						if(tempDown - down != 1) {
+						if(down - tempDown != 1) {
 							isValidMove = false;
 						}
 						else {
@@ -253,8 +253,8 @@ public class ChessMain {
 					}
 					break;
 				case 'p':
-					if(tempDown + 1 == 2) {
-						if(tempDown - down == -1 || tempDown - down == -2) {
+					if(down + 1 == 2) {
+						if(down - tempDown == -1 || down - tempDown == -2) {
 							isValidMove = true;
 						}
 						else {
@@ -277,16 +277,16 @@ public class ChessMain {
 					}
 					break;
 				case 'H': case 'h':
-					if(tempDown - down == 2 && tempAcross - across == 1 || tempAcross - across == - 1) {
+					if(down - tempDown == 2 && across - tempAcross == 1 || across - tempAcross == - 1) {
 						isValidMove = true;
 					} 
-					else if(tempDown - down == 1 && tempAcross - across == 2 || tempAcross - across == -2) {
+					else if(tempDown - down == 1 && across - tempAcross  == 2 || across - tempAcross == -2) {
 						isValidMove = true; 	
 					}
-					else if(tempDown - down == -2 && tempAcross - across == 1 || tempAcross - across == -1) {
+					else if(tempDown - down == -2 && across - tempAcross  == 1 || across - tempAcross  == -1) {
 						isValidMove = true;
 					}
-					else if(tempDown - down == -1 && tempAcross - across == 2 || tempAcross - across == -2) {
+					else if(tempDown - down == -1 && across - tempAcross  == 2 || across - tempAcross  == -2) {
 						isValidMove = true;
 					}
 					else {
@@ -294,7 +294,7 @@ public class ChessMain {
 					}
 					break;
 				case 'B': case 'b':
-					if(tempDown - down != tempAcross - across && tempDown - down != across - tempAcross) {
+					if(down - tempDown != across - tempAcross  && down - tempDown != tempAcross - across) {
 						isValidMove = false;
 					}
 					else {
@@ -363,14 +363,14 @@ public class ChessMain {
 				if(vertical == 0) {
 					if(horizontal > 0) {
 						for(int i = 0; i < horizontal; i++) {
-							if(board[tempDown - 1 - i][across] != '`') {
+							if(board[tempDown][across  - 1 - i] != '`') {
 								return false;
 							}
 						}
 					}
 					else {
 						for(int i = 0; i > horizontal; i--) {
-							if(board[tempDown + 1 + i][across] != '`') {
+							if(board[tempDown][across  + 1 + i] != '`') {
 								return false;
 							}
 						}
@@ -379,14 +379,14 @@ public class ChessMain {
 				else if(horizontal == 0) {
 					if(vertical > 0) {
 						for(int i = 0; i < vertical; i++) {
-							if(board[tempDown][across - 1 - i] != '`') {
+							if(board[tempDown - 1 - i][across] != '`') {
 								return false;
 							}
 						}
 					}
 					else {
 						for(int i = 0; i > vertical; i--) {
-							if(board[tempDown][across + 1 + i] != '`') {
+							if(board[tempDown + 1 + i][across] != '`') {
 								return false;
 							}
 						}
