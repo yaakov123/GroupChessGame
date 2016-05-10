@@ -335,9 +335,9 @@ public class ChessMain {
 			System.out.println("You need to move the piece somewhere else.");
 			return false;
 		}
-		if(isValidMove) {
-			isValidMove = checkPiecePath(tempPieceType, across, tempAcross, down, tempDown, board, whichPlayer);
-		}
+		//if(isValidMove) {
+			//isValidMove = checkPiecePath(tempPieceType, across, tempAcross, down, tempDown, board, whichPlayer);
+		//}
 		return isValidMove;
 	}
 	//Check a8 to a5 after pawn tomorrow
@@ -353,8 +353,9 @@ public class ChessMain {
 				}
 				break;
 			case 'p':
-				for(int i = 0; i > vertical; i--) {
-					if(board[tempDown + 1 - i][across] != '`') {
+				double absI = Math.abs((double) vertical);
+				for(int i = 0; i > absI; i--) {
+					if(board[tempDown + 1 + i][across] != '`') {
 						return false;
 					}
 				}
